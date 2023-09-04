@@ -10,3 +10,14 @@
 .f7e-viewer.fullscreen {
     height: 100vh !important;
 }
+
+.not_found_modal_container {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 300;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}

@@ -1,18 +1,30 @@
 let isFullScreen = false;
+let error = false;
 const TOGGLE_BUTTON_CLASS = 'toggle-fullscreen-button';
 
 const getButtonText = (isFullScreen) => {
   return `${isFullScreen ? "Exit" : "Enter"} fullscreen`;
 }
 
+const modalHtml = `
+<div class="not_found_modal_container">
+  <img src="images/icon-128.png"/>
+  <p>Firebase-fullscreen extension could not locate some elements in the DOM to insert button or to toggle fullscreen. Please check that you are using the latest version of the extension or <a href="https://github.com/clementlize/firestore-fullscreen">submit an issue</a>. Thank you.</p>
+  <span class="mat-mdc-button-touch-target" />
+</div>
+`
+
+const modal = document.createElement('template');
+modal.innerHTML = modalHtml;
+
 const observer = new MutationObserver((mutations) => {
   
-  const toggleButtonContainer = document.querySelector(".fire-card-action-bar.on-grey-theme-container");
+  const toggleButtonContainer = document.querySelector(".fire-card-action-bar.on-grey-theme-container2");
   if (toggleButtonContainer) {
     
     console.debug("Found container for toggle button", toggleButtonContainer);
     
-    // Add toggle button if needed
+    // Add toggle button only if needed
     if (!document.querySelector(`.${TOGGLE_BUTTON_CLASS}`)) {
 
       console.log("Adding toggle button...");
@@ -46,8 +58,19 @@ const observer = new MutationObserver((mutations) => {
       });
     }
   }
-  else {
+  else if (!error) {
+
+    error = true;
     console.debug("Could not find container for toggle button");
+
+    const body = document.querySelector("body");
+    if (body) {
+      body.appendChild(modal.content.cloneNode(true));
+    }
+    else {
+      console.error("Could not find body element");
+    }
   }
 });
+
 observer.observe(document, { childList: true, subtree: true });
