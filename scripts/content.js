@@ -1,11 +1,17 @@
 let isFullScreen = false;
 const TOGGLE_BUTTON_CLASS = 'toggle-fullscreen-button';
 
+let currentTabUrl = null;
+
 const getButtonText = (isFullScreen) => {
   return `${isFullScreen ? "Exit" : "Enter"} fullscreen`;
 }
 
-const observer = new MutationObserver((mutations) => {
+const observer = new MutationObserver(async (mutations) => {
+
+  const response = await chrome.runtime.sendMessage({greeting: "hello"});
+  // do something with response here, not outside the function
+  console.log("RESPONSE", response);
   
   const toggleButtonContainer = document.querySelector(".fire-card-action-bar.on-grey-theme-container");
   if (toggleButtonContainer) {
